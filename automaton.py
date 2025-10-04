@@ -76,33 +76,33 @@ class Automaton:
         else:
             return False
 
-#Step 1, define the number of states        
-Q = States(4)
+#Step 1, define the number of states and alphabet used        
+n = 4; alphabet = ["4", "8", "1"]
 
-#Step 2, add edges
-Q.addEdge(0, 1, "4")
-Q.addEdge(0, 0, "8")
-Q.addEdge(0, 0, "1")
-Q.addEdge(1, 0, "4")
-Q.addEdge(1, 2, "8")
-Q.addEdge(1, 0, "1")
-Q.addEdge(2, 0, "4")
-Q.addEdge(2, 0, "8")
-Q.addEdge(2, 3, "1")
-Q.addEdge(3, 3, "4")
-Q.addEdge(3, 3, "8")
-Q.addEdge(3, 3, "1")
+#Step 2 define the transition function
+arr = [
+    [1, 0, 0], #each row is a state
+    [0, 2, 0], #the column corresponds to each condition
+    [0, 0, 3], #the 3 here is for state 2 and action "1"
+    [3, 3, 3]
+]
 
-#Step 3, add alphabet
-sigma = InputAlphabet(["4", "8", "1"])
+Q = States(n)
 
-#Step 4, add a transition function
+for pos, state in enumerate(arr):
+    for type, output in enumerate(arr[pos]):
+        Q.addEdge(pos, output, alphabet[type])
+
+#Step 2, add alphabet
+sigma = InputAlphabet(alphabet)
+
+#Step 3, add a transition function (this is for show the states do all the heavy lifting)
 delta = TransitionFunction()
 
-#Step 5, add a start state
+#Step 4, add a start state
 s = StartState(Q, 0)
 
-#Step 6, add a accepted strings
+#Step 5, add a accepted strings
 F = AcceptState(Q, [3])
 
 computer = Automaton(Q, sigma, s, F, delta)
